@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.listen(process.env.PORT || 3000, process.env.IP || '0.0.0.0' );//new
-
+app.use(express.static('views/images')); 
 app.use('/', indexRouter);
 
 app.post('/post-feedback', function (req, res) {

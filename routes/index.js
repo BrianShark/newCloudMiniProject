@@ -13,8 +13,21 @@ Time.find(function(err,docs){
     }
     res.render('home/index', { title: 'Cloud Security System', times: timeChunks });
   }).lean();
-
-
 });
+
+router.get('/info', function(req,res,next) {
+  res.render('home/info', { title: 'Information'});
+})
+
+router.get('/index', function(req,res,next) {
+  Time.find(function(err,docs){
+      var timeChunks = [];
+      chunkSize = 3;
+      for(var i = 0; i < docs.length; i+= chunkSize ){
+        timeChunks.push(docs.slice(i,i+chunkSize));
+      }
+      res.render('home/index', { title: 'Cloud Security System', times: timeChunks });
+    }).lean();
+})
 
 module.exports = router;

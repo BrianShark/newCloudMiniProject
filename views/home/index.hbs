@@ -20,3 +20,30 @@
               {{/each}}
           </div>
         {{/each}}
+
+        <p>
+        Time: <span id="time"></span>
+      </p>
+
+  <script>
+
+  const time_url = 'http://worldclockapi.com/api/json/gmt/now';
+
+  async function getTime(){
+    const response = await fetch(time_url);
+    const data = await response.json();
+    document.getElementById('time').textContent = data.currentDateTime;
+    console.log(data.currentDateTime);
+  }
+
+
+  getTime();
+
+  </script>
+
+  <form method="POST" action="/post-feedback">
+          <label>Time:<input type="text" name="Time:" required></label>
+          <br>
+          <br>
+          <input type="submit" value="Submit">
+      </form>

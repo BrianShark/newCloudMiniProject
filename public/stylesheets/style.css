@@ -6,3 +6,11 @@
 .thumbnail Time pull-left {
   color: #7f7f7f
 }
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  justify-content: center;
+}
