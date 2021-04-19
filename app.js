@@ -11,7 +11,6 @@ var Time = require('./models/time');
 
 
 var app = express();
-mongoose.connect('localhost:27017/timestamps');
 // view engine setup
 app.engine('.hbs',expressHbs({defaultLayout: 'layout', extname: '.hbs'}));
 app.set('view engine', 'hbs');
@@ -22,11 +21,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.listen(process.env.PORT || 3000, process.env.IP || '0.0.0.0' );//new
-app.use(express.static('views/images')); 
+app.use(express.static('views/images'));
 app.use('/', indexRouter);
 
 app.post('/post-feedback', function (req, res) {
-  mongoose.connect("mongodb://localhost:27017/timestamps", { useNewUrlParser: true });
   var times = [
      new Time({
   CurrentDateAndTime: JSON.stringify(req.body)

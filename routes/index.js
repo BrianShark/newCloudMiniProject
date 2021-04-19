@@ -8,10 +8,9 @@ const time_url = 'http://worldclockapi.com/api/json/gmt/now';
 mongoose.connect("mongodb://localhost:27017/timestamps", { useNewUrlParser: true });
 
 async function getTime(){
-  const response = await fetch(time_url);
-  const data = await response.json();
-  document.getElementById('time').textContent = data.currentDateTime;
-  console.log(data.currentDateTime);
+  //had to remove get time because the document function
+  //produces error:
+  //referenceerror: document is not defined nodejs
 }
 
 async function getAlarm(alarm){
@@ -49,9 +48,9 @@ router.get('/index', function(req,res,next) {
 })
 
 var device = awsIot.device({
-  keyPath: "C:\\AwsFiles\\10eddb17bb-private.pem.key",
-  certPath: "C:\\AwsFiles\\10eddb17bb-certificate.pem.crt",
-  caPath: "C:\\AwsFiles\\AmazonRootCA1.pem",
+  keyPath: "home/AwsFiles/10eddb17bb-private.pem.key",
+  certPath: "home/AwsFiles/10eddb17bb-certificate.pem.crt",
+  caPath: "home/AwsFiles/AmazonRootCA1.pem",
   clientId: "qwerty", // some random value for now!
   host: "a3ddoytnj05dne-ats.iot.us-east-1.amazonaws.com"
 });
@@ -63,8 +62,6 @@ device.on('message', function(topic, payload) {
   console.log('message', topic, payload.toString());
 
   getTime();
-
-  mongoose.connect("mongodb://localhost:27017/timestamps", { useNewUrlParser: true });
   var times = [
     new Time({
       CurrentDateAndTime: JSON.stringify(payload.toString())
