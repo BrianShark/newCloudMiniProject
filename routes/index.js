@@ -14,6 +14,14 @@ async function getTime(){
   console.log(data.currentDateTime);
 }
 
+async function getAlarm(alarm){
+  device.on('connect', function() {
+      console.log('connect');
+      device.subscribe(alarm);
+      device.publish(alarm, JSON.stringify({ test_data: "publish from node.js"}));
+    });
+}
+
 router.get('/', function(req, res, next) {
 Time.find(function(err,docs){
     var timeChunks = [];
@@ -48,43 +56,38 @@ var device = awsIot.device({
   host: "a3ddoytnj05dne-ats.iot.us-east-1.amazonaws.com"
 });
 
-device
-  .on('connect', function() {
-    console.log('connect');
-    device.subscribe('TOUCH_SET');
-    device.publish('TOUCH_SET', JSON.stringify({ test_data: "publish from node.js"}));
-  });
+getAlarm('TOUCH');
+getAlarm('HALL');
 
-device
-  .on('message', function(topic, payload) {
-    console.log('message', topic, payload.toString());
+device.on('message', function(topic, payload) {
+  console.log('message', topic, payload.toString());
 
-getTime();
-    mongoose.connect("mongodb://localhost:27017/timestamps", { useNewUrlParser: true });
-    var times = [
-       new Time({
-    CurrentDateAndTime: JSON.stringify(payload.toString())
+  getTime();
 
+  mongoose.connect("mongodb://localhost:27017/timestamps", { useNewUrlParser: true });
+  var times = [
+    new Time({
+      CurrentDateAndTime: JSON.stringify(payload.toString())
     })
+  ];
 
-    ];
-    var done =0;
-    for(var i = 0; i< times.length; i++)
-    {
-      times[i].save(function(err,result) {
-        done++;
-        if(done === times.length)
-        {
-          exit();
-        }
-      });
-    }
+  var done =0;
+  for(var i = 0; i< times.length; i++)
+  {
+    times[i].save(function(err,result) {
+    done++;
+      if(done === times.length)
+      {
+        exit();
+      }
+    });
+  }
 
-    function exit()
-    {
-      mongoose.disconnect();
-    }
-  });
+  function exit()
+  {
+    mongoose.disconnect();
+  }
+});
 
 
 module.exports = router;
