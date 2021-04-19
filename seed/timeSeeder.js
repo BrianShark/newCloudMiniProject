@@ -1,6 +1,5 @@
 var Time = require('../models/time');
 var mongoose = require('mongoose');
-mongoose.connect("mongodb://localhost:27017/timestamps", { useNewUrlParser: true });
 
 
 var times = [
